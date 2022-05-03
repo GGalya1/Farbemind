@@ -80,6 +80,13 @@ namespace Farbemind
                 };
 
                 //Rechtklickmeü für Farbwahl
+                ContextMenu contextMenu = new ContextMenu();
+                MenuItem menuItemBlack = new MenuItem();
+                menuItemBlack.Header = "Schwarz";
+                menuItemBlack.Click += new RoutedEventHandler(EllipseSchwarzFarben); //mache das und sende information, wer das gemacht hat
+                contextMenu.Items.Add(menuItemBlack);
+
+                ellipse.ContextMenu = contextMenu;
 
 
                 //Ellipse dem Grid hinzufügen
@@ -104,6 +111,14 @@ namespace Farbemind
             textBoxes.Add(textBox);
 
             runde++;
+        }
+
+        private void EllipseSchwarzFarben(object sender, RoutedEventArgs e)
+        {
+            MenuItem mi = e.Source as MenuItem;
+            ContextMenu cm = mi.Parent as ContextMenu;
+            Ellipse el = cm.PlacementTarget as Ellipse;
+            el.Fill = Brushes.Black; //Ellipse hat den ContextMenu, Contextmenu hat MenuItem
         }
     }
 }
