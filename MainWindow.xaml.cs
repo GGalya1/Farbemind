@@ -81,7 +81,7 @@ namespace Farbemind
 
         private void Raten(int[] raten)
         {
-            string[] ausgabe = new string[4];
+            List<string> ausgabe = new List<string>(4);
             for (int i = 0; i<raten.Length; i++)
             {
                 if (raten[i] == code[i])
@@ -94,7 +94,8 @@ namespace Farbemind
                 }
                 else ausgabe[i] = " ";
             }
-            Mischen(ausgabe); //hier gebe ich eine Referenz zu meinem Array, also er wird live verändert
+            //Mischen(ausgabe); //hier gebe ich eine Referenz zu meinem Array, also er wird live verändert
+            ausgabe = ausgabe.OrderBy(i => rnd.Next()).ToList();
         }
 
         public void Mischen(string[] stringArray) //hier wird Array verarbeitet und live verändert
@@ -106,7 +107,7 @@ namespace Farbemind
                 string temp = stringArray[n];
                 stringArray[n] = stringArray[k];
                 stringArray[k] = temp;
-
+                //(stringArray[n], stringArray[k] = (stringArray[k], stringArray[n])); //die Gleiche wie die oben geschriebenen Zeilen
             }
         }
 
