@@ -22,6 +22,8 @@ namespace Farbemind
     {
         List<Ellipse> ellipses = new List<Ellipse>();
         List<TextBox> textBoxes = new List<TextBox>();
+        int[] code = new int[4];// 0=Schwarz 1=Blau 2=Rot 3=Grün
+        Random rnd = new Random();
         int runde = 0;
 
         public MainWindow()
@@ -54,8 +56,79 @@ namespace Farbemind
         private void Knopf_Starten_Click(object sender, RoutedEventArgs e)
         {
             NeueZeile();
+            foreach (int i in code)
+            {
+                code[i] = rnd.Next(0, 4);
+            }
+            //MessageBoxResult result = MessageBox.Show("{0} - {1} - {2} - {3}", code[0], code[1], code[2], code[3]);
             Knopf_Starten.IsEnabled = false;
             Knopf_Raten.IsEnabled = true;
+        }
+        private void Knopf_Raten_Click(object sender, RoutedEventArgs e)
+        {
+            int[] raten = new int[4];
+            for (int i = 0; i < raten.Length; i++)
+            {
+                raten[i] = FarbeZuZahl(ellipses[i].Fill);
+            }
+            if (raten.Contains(-1))
+            {
+                MessageBox.Show("Bitte Farben für alle Kreise wählen.", "Fehler!");
+            }
+            else
+                Raten(raten); //wenn es kein Fehler gibt/ alle Farben gewahlt wurden, dann gehen wir zur unseren Methode und arbeiten weiter
+        }
+
+        private void Raten(int[] raten)
+        {
+            string[] ausgabe = new string[4];
+            for (int i = 0; i<raten.Length; i++)
+            {
+                if (raten[i] == code[i])
+                {
+                    ausgabe[i] = "X";
+                }
+                else if (code.Contains(raten[i]))
+                {
+                    ausgabe[i] = "O";
+                }
+                else ausgabe[i] = " ";
+            }
+            Mischen(ausgabe); //hier gebe ich eine Referenz zu meinem Array, also er wird live verändert
+        }
+
+        public void Mischen(string[] stringArray) //hier wird Array verarbeitet und live verändert
+        {
+            int n = stringArray.Length;
+            while (n > 1)
+            {
+                int k = rnd.Next(n--); //von letztem Element bis 1-em mit zufäligem Element tauschen + n-- -> n = n - 1
+                string temp = stringArray[n];
+                stringArray[n] = stringArray[k];
+                stringArray[k] = temp;
+
+            }
+        }
+
+        private int FarbeZuZahl(Brush color)
+        {
+            int zahl = -1;
+            if (color == Brushes.Black)
+            {
+                zahl = 0;
+            }
+            else if (color == Brushes.Blue)
+            {
+                zahl = 1;
+            }
+            else if (color == Brushes.Red)
+            {
+                zahl = 2;
+            }
+            else if(color == Brushes.Green)
+                zahl = 3;
+
+            return zahl;
         }
 
 
@@ -70,6 +143,7 @@ namespace Farbemind
             Spielfeld.RowDefinitions.Add(rowDefinition);
 
             //Ellipsen
+            ellipses.Clear(); //Damit schon benutze Ellipse nicht weiter verwenden
             for (int i = 0; i < 5; i++)
             {
                 //Ellipse definieren
@@ -129,33 +203,35 @@ namespace Farbemind
             runde++;
         }
 
+
+        /// <summary>
+        /// Ellipse el = ((ContextMenu)((MenuItem)e.Source).Parent).PlacementTarget as Ellipse; - macht die Gleiche wie "MenuItem mi = e.Source as MenuItem; + ContextMenu cm = mi.Parent as ContextMenu;"
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EllipseSchwarzFarben(object sender, RoutedEventArgs e)
         {
             MenuItem mi = e.Source as MenuItem;
             ContextMenu cm = mi.Parent as ContextMenu;
-            Ellipse el = cm.PlacementTarget as Ellipse;
+            Ellipse el = cm.PlacementTarget as Ellipse; 
             el.Fill = Brushes.Black; //Ellipse hat den ContextMenu, Contextmenu hat MenuItem
         }
         private void EllipseRotFarben(object sender, RoutedEventArgs e)
         {
-            MenuItem mi = e.Source as MenuItem;
-            ContextMenu cm = mi.Parent as ContextMenu;
-            Ellipse el = cm.PlacementTarget as Ellipse;
+            MenuItem mi = sender as MenuItem; //sender soll als MenuItem betrachtet werden
+            Ellipse el = ((ContextMenu)mi.Parent).PlacementTarget as Ellipse;
             el.Fill = Brushes.Red; //Ellipse hat den ContextMenu, Contextmenu hat MenuItem
         }
         private void EllipseGruenFarben(object sender, RoutedEventArgs e)
         {
-            MenuItem mi = e.Source as MenuItem;
-            ContextMenu cm = mi.Parent as ContextMenu;
-            Ellipse el = cm.PlacementTarget as Ellipse;
+            Ellipse el = ((ContextMenu)((MenuItem)e.Source).Parent).PlacementTarget as Ellipse;
             el.Fill = Brushes.Green; //Ellipse hat den ContextMenu, Contextmenu hat MenuItem
         }
         private void EllipseBlauFarben(object sender, RoutedEventArgs e)
         {
-            MenuItem mi = e.Source as MenuItem;
-            ContextMenu cm = mi.Parent as ContextMenu;
-            Ellipse el = cm.PlacementTarget as Ellipse;
-            el.Fill = Brushes.Blue; //Ellipse hat den ContextMenu, Contextmenu hat MenuItem
+            ((Ellipse)((ContextMenu)((MenuItem)e.Source).Parent).PlacementTarget).Fill = Brushes.Blue; // macht die Gleiche wie //MenuItem mi = e.Source as MenuItem; + ContextMenu cm = mi.Parent as ContextMenu;
+            
         }
     }
 }

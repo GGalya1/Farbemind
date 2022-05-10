@@ -25,7 +25,7 @@
                 <RowDefinition Height="4*"/>
             </Grid.RowDefinitions>
             <TextBox x:Name="Spielregeln" Grid.Row="2" IsReadOnly="true"/>
-            <Button x:Name="Knopf_Raten" Content="Raten" Grid.Row="1" IsEnabled="false"/>
+            <Button x:Name="Knopf_Raten" Content="Raten" Grid.Row="1" IsEnabled="false" Click="Knopf_Raten_Click"/>
             <Button x:Name="Knopf_Starten" Content="Starten" Grid.Row="0" Click="Knopf_Starten_Click"/>
         </Grid>
 
