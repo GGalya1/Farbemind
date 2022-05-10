@@ -81,10 +81,26 @@ namespace Farbemind
 
                 //Rechtklickmeü für Farbwahl
                 ContextMenu contextMenu = new ContextMenu();
+
                 MenuItem menuItemBlack = new MenuItem();
                 menuItemBlack.Header = "Schwarz";
                 menuItemBlack.Click += new RoutedEventHandler(EllipseSchwarzFarben); //mache das und sende information, wer das gemacht hat
                 contextMenu.Items.Add(menuItemBlack);
+
+                MenuItem menuItemRed = new MenuItem();
+                menuItemRed.Header = "Rot";
+                menuItemRed.Click += new RoutedEventHandler(EllipseRotFarben); //mache das und sende information, wer das gemacht hat
+                contextMenu.Items.Add(menuItemRed);
+
+                MenuItem menuItemGreen = new MenuItem();
+                menuItemGreen.Header = "Grün";
+                menuItemGreen.Click += new RoutedEventHandler(EllipseGruenFarben); //mache das und sende information, wer das gemacht hat
+                contextMenu.Items.Add(menuItemGreen);
+
+                MenuItem menuItemBlue = new MenuItem();
+                menuItemBlue.Header = "Blau";
+                menuItemBlue.Click += new RoutedEventHandler(EllipseBlauFarben); //mache das und sende information, wer das gemacht hat
+                contextMenu.Items.Add(menuItemBlue);
 
                 ellipse.ContextMenu = contextMenu;
 
@@ -119,6 +135,27 @@ namespace Farbemind
             ContextMenu cm = mi.Parent as ContextMenu;
             Ellipse el = cm.PlacementTarget as Ellipse;
             el.Fill = Brushes.Black; //Ellipse hat den ContextMenu, Contextmenu hat MenuItem
+        }
+        private void EllipseRotFarben(object sender, RoutedEventArgs e)
+        {
+            MenuItem mi = e.Source as MenuItem;
+            ContextMenu cm = mi.Parent as ContextMenu;
+            Ellipse el = cm.PlacementTarget as Ellipse;
+            el.Fill = Brushes.Red; //Ellipse hat den ContextMenu, Contextmenu hat MenuItem
+        }
+        private void EllipseGruenFarben(object sender, RoutedEventArgs e)
+        {
+            MenuItem mi = e.Source as MenuItem;
+            ContextMenu cm = mi.Parent as ContextMenu;
+            Ellipse el = cm.PlacementTarget as Ellipse;
+            el.Fill = Brushes.Green; //Ellipse hat den ContextMenu, Contextmenu hat MenuItem
+        }
+        private void EllipseBlauFarben(object sender, RoutedEventArgs e)
+        {
+            MenuItem mi = e.Source as MenuItem;
+            ContextMenu cm = mi.Parent as ContextMenu;
+            Ellipse el = cm.PlacementTarget as Ellipse;
+            el.Fill = Brushes.Blue; //Ellipse hat den ContextMenu, Contextmenu hat MenuItem
         }
     }
 }
