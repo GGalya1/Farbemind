@@ -55,6 +55,9 @@ namespace Farbemind
         /// <param name="e"></param>
         private void Knopf_Starten_Click(object sender, RoutedEventArgs e)
         {
+            ellipses.Clear();
+            textBoxes.Clear();
+            runde = 0;
             NeueZeile();
             foreach (int i in code)
             {
@@ -81,21 +84,33 @@ namespace Farbemind
 
         private void Raten(int[] raten)
         {
-            List<string> ausgabe = new List<string>(4);
+            List<string> ausgabe = new List<string>();
             for (int i = 0; i<raten.Length; i++)
             {
                 if (raten[i] == code[i])
                 {
-                    ausgabe[i] = "X";
+                    ausgabe.Add("X");
                 }
                 else if (code.Contains(raten[i]))
                 {
-                    ausgabe[i] = "O";
+                    ausgabe.Add("O");
                 }
-                else ausgabe[i] = " ";
+                else ausgabe.Add(" ");
             }
             //Mischen(ausgabe); //hier gebe ich eine Referenz zu meinem Array, also er wird live verändert
             ausgabe = ausgabe.OrderBy(i => rnd.Next()).ToList();
+            string ausgabetext = " ";
+            ausgabe.ForEach(x => ausgabetext += x + " ");
+            textBoxes[runde - 1].Text = ausgabetext;
+
+            if(ausgabetext == "X X X X")
+            {
+                MessageBox.Show("Sie haben den Code geknackt!", "Gewonnen!");
+                Knopf_Starten.IsEnabled = true;
+                Knopf_Raten.IsEnabled = false;
+            }
+
+            NeueZeile();
         }
 
         public void Mischen(string[] stringArray) //hier wird Array verarbeitet und live verändert
@@ -144,6 +159,15 @@ namespace Farbemind
             Spielfeld.RowDefinitions.Add(rowDefinition);
 
             //Ellipsen
+            //Ellipsen der vorigen Runde deaktivieren
+            if (runde > 0)
+            {
+                ellipses.ForEach(x => x.IsEnabled = false);
+            }
+
+            //Liste leeren
+            ellipses.Clear();
+
             ellipses.Clear(); //Damit schon benutze Ellipse nicht weiter verwenden
             for (int i = 0; i < 5; i++)
             {
