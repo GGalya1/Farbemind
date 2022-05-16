@@ -59,10 +59,13 @@ namespace Farbemind
             textBoxes.Clear();
             runde = 0;
             NeueZeile();
-            foreach (int i in code)
+            for (int i = 0; i < 4; i++)
             {
                 code[i] = rnd.Next(0, 4);
+                Spielregeln.Text += Convert.ToString(code[i]);
             }
+
+
             //MessageBoxResult result = MessageBox.Show("{0} - {1} - {2} - {3}", code[0], code[1], code[2], code[3]);
             Knopf_Starten.IsEnabled = false;
             Knopf_Raten.IsEnabled = true;
@@ -79,7 +82,20 @@ namespace Farbemind
                 MessageBox.Show("Bitte Farben für alle Kreise wählen.", "Fehler!");
             }
             else
+            { 
                 Raten(raten); //wenn es kein Fehler gibt/ alle Farben gewahlt wurden, dann gehen wir zur unseren Methode und arbeiten weiter
+                Spielregeln.Text += "\n";
+                for (int i = 0; i < raten.Length; i++)
+                {
+                    Spielregeln.Text += Convert.ToString(raten[i]);
+                }
+                Spielregeln.Text += "\t";
+                for (int i = 0; i < raten.Length; i++)
+                {
+                    Spielregeln.Text += Convert.ToString(code[i]);
+                }
+                
+            }
         }
 
         private void Raten(int[] raten)
@@ -87,6 +103,7 @@ namespace Farbemind
             List<string> ausgabe = new List<string>();
             for (int i = 0; i<raten.Length; i++)
             {
+                Console.WriteLine(code[i]);
                 if (raten[i] == code[i])
                 {
                     ausgabe.Add("X");
@@ -103,7 +120,7 @@ namespace Farbemind
             ausgabe.ForEach(x => ausgabetext += x + " ");
             textBoxes[runde - 1].Text = ausgabetext;
 
-            if(ausgabetext == "X X X X")
+            if(ausgabetext == " X X X X ")
             {
                 MessageBox.Show("Sie haben den Code geknackt!", "Gewonnen!");
                 Knopf_Starten.IsEnabled = true;
