@@ -108,7 +108,7 @@ namespace Farbemind
                 {
                     ausgabe.Add("X");
                 }
-                else if (code.Contains(raten[i]))
+                else if (raten.Contains(code[i]))
                 {
                     ausgabe.Add("O");
                 }
